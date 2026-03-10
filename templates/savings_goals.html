@@ -5,8 +5,10 @@
 <div class="dashboard-header">
     <div class="row align-items-center">
         <div class="col-md-6">
-            <h2> Savings Goals</h2>
-            <p>Track your savings targets</p>
+            <h2>🎯 Savings Goals</h2>
+            <p class="text-muted">
+                Track your savings targets
+            </p>
         </div>
         <div class="col-md-6 text-end">
             <a href="{% url 'dashboard' %}"
@@ -20,7 +22,7 @@
 <!-- Add Goal Form -->
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="mb-3"> Add New Savings Goal</h5>
+        <h5 class="mb-3">➕ Add New Savings Goal</h5>
 
         <form method="POST">
             {% csrf_token %}
@@ -28,8 +30,11 @@
 
                 <!-- Goal Name -->
                 <div class="col-md-3 mb-3">
-                    <label>Goal Name</label>
+                    <label for="goal_name">
+                        Goal Name
+                    </label>
                     <input type="text"
+                           id="goal_name"
                            name="goal_name"
                            class="form-control"
                            placeholder="e.g. New Laptop"
@@ -37,9 +42,12 @@
                 </div>
 
                 <!-- Target Amount -->
-                <div class="col-md-3 mb-3">
-                    <label>Target Amount ($)</label>
+                <div class="col-md-2 mb-3">
+                    <label for="target_amount">
+                        Target Amount ($)
+                    </label>
                     <input type="number"
+                           id="target_amount"
                            name="target_amount"
                            class="form-control"
                            placeholder="e.g. 1000"
@@ -49,30 +57,37 @@
                 </div>
 
                 <!-- Current Amount -->
-                <div class="col-md-3 mb-3">
-                    <label>Current Saved ($)</label>
+                <div class="col-md-2 mb-3">
+                    <label for="current_amount">
+                        Already Saved ($)
+                    </label>
                     <input type="number"
+                           id="current_amount"
                            name="current_amount"
                            class="form-control"
                            placeholder="e.g. 200"
                            step="0.01"
-                           min="0">
+                           min="0"
+                           value="0">
                 </div>
 
                 <!-- Deadline -->
-                <div class="col-md-2 mb-3">
-                    <label>Deadline</label>
+                <div class="col-md-3 mb-3">
+                    <label for="deadline">
+                        Deadline
+                    </label>
                     <input type="date"
+                           id="deadline"
                            name="deadline"
                            class="form-control"
                            required>
                 </div>
 
                 <!-- Submit -->
-                <div class="col-md-1 mb-3 mt-4">
+                <div class="col-md-2 mb-3 mt-4">
                     <button type="submit"
                             class="btn btn-dark w-100">
-                        Add
+                        Add Goal
                     </button>
                 </div>
 
@@ -90,40 +105,57 @@
             <div class="card-body">
 
                 <!-- Goal Name & Delete -->
-                <div class="d-flex justify-content-between
+                <div class="d-flex
+                            justify-content-between
                             align-items-center mb-3">
-                    <h5> {{ goal.goal_name }}</h5>
+                    <h5>🎯 {{ goal.goal_name }}</h5>
                     <a href="{% url 'delete_goal' goal.id %}"
                        class="btn btn-danger btn-sm"
                        onclick="return confirmDelete(
-                       'Delete this savings goal?')">
-                        🗑
+                       'Delete this savings goal?')"
+                       aria-label="Delete {{ goal.goal_name }}">
+                        🗑 Delete
                     </a>
                 </div>
 
-                <!-- Amounts -->
-                <div class="row mb-2">
+                <!-- Amounts Row -->
+                <div class="row mb-3">
                     <div class="col-6">
-                        <small class="text-muted">Saved</small>
-                        <p class="text-success fw-bold">
+                        <small class="text-muted">
+                            Saved So Far
+                        </small>
+                        <p class="text-success fw-bold mb-0">
                             ${{ goal.current_amount|floatformat:2 }}
                         </p>
                     </div>
                     <div class="col-6">
-                        <small class="text-muted">Target</small>
-                        <p class="text-primary fw-bold">
+                        <small class="text-muted">
+                            Target
+                        </small>
+                        <p class="text-primary fw-bold mb-0">
                             ${{ goal.target_amount|floatformat:2 }}
                         </p>
                     </div>
                 </div>
 
                 <!-- Progress Bar -->
-                <div class="mb-2">
-                    <div class="d-flex justify-content-between">
+                <div class="mb-3">
+                    <div class="d-flex
+                                justify-content-between
+                                mb-1">
                         <small>Progress</small>
-                        <small>{{ goal.progress }}%</small>
+                        <small>
+                            <strong>
+                                {{ goal.progress }}%
+                            </strong>
+                        </small>
                     </div>
-                    <div class="progress mt-1">
+                    <div class="progress"
+                         role="progressbar"
+                         aria-valuenow="{{ goal.progress }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         aria-label="{{ goal.goal_name }} progress">
                         <div class="progress-bar
                             {% if goal.progress >= 100 %}
                                 safe
@@ -133,32 +165,37 @@
                                 danger
                             {% endif %}"
                             data-percent="{{ goal.progress }}"
-                            style="width: {{ goal.progress }}%">
+                            style="width:
+                            {% if goal.progress > 100 %}
+                                100
+                            {% else %}
+                                {{ goal.progress }}
+                            {% endif %}%">
                         </div>
                     </div>
                 </div>
 
-                <!-- Status -->
-                <div class="d-flex justify-content-between
-                            align-items-center mt-3">
+                <!-- Deadline & Status -->
+                <div class="d-flex
+                            justify-content-between
+                            align-items-center">
 
-                    <!-- Deadline -->
                     <small class="text-muted">
-                         Deadline: {{ goal.deadline }}
+                        📅 Deadline: {{ goal.deadline }}
                     </small>
 
-                    <!-- Badge -->
+                    <!-- Status Badge -->
                     {% if goal.progress >= 100 %}
                         <span class="badge-safe">
-                             Goal Reached!
+                            ✅ Goal Reached!
                         </span>
                     {% elif goal.progress >= 50 %}
                         <span class="badge-warning">
-                             Halfway There!
+                            🔥 Halfway There!
                         </span>
                     {% else %}
                         <span class="badge-danger">
-                             Keep Saving!
+                            🚀 Keep Saving!
                         </span>
                     {% endif %}
 
@@ -174,12 +211,16 @@
 <!-- No Goals Yet -->
 <div class="card">
     <div class="card-body text-center py-5">
-        <h4 class="text-muted">No savings goals yet</h4>
+        <h4 class="text-muted">
+            No savings goals yet
+        </h4>
         <p class="text-muted">
-            Add your first savings goal using the form above
+            Add your first savings goal
+            using the form above
         </p>
     </div>
 </div>
 {% endif %}
 
 {% endblock %}
+
