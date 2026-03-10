@@ -1,0 +1,485 @@
+/* ═══════════════════════════════════════════
+   GLOBAL STYLES
+═══════════════════════════════════════════ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* ═══════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════ */
+
+.navbar {
+    background-color: #1a1a2e !important;
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff !important;
+}
+
+.nav-link {
+    color: #ccc !important;
+    margin: 0 10px;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #f0c040 !important;
+}
+
+/* ═══════════════════════════════════════════
+   DASHBOARD CARDS
+═══════════════════════════════════════════ */
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.card-body {
+    padding: 25px;
+}
+
+/* Balance Card */
+.card.bg-success {
+    background: linear-gradient(
+        135deg, #11998e, #38ef7d) !important;
+}
+
+/* Daily Allowance Card */
+.card.bg-primary {
+    background: linear-gradient(
+        135deg, #667eea, #764ba2) !important;
+}
+
+/* Upcoming Bills Card */
+.card.bg-warning {
+    background: linear-gradient(
+        135deg, #f093fb, #f5576c) !important;
+}
+
+.card h3 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.card h5 {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESS BARS
+═══════════════════════════════════════════ */
+
+.progress {
+    height: 12px;
+    border-radius: 10px;
+    background-color: #e9ecef;
+    margin-top: 5px;
+}
+
+.progress-bar {
+    border-radius: 10px;
+    transition: width 0.6s ease;
+}
+
+/* Safe - Green */
+.progress-bar.safe {
+    background: linear-gradient(90deg, #56ab2f, #a8e063);
+}
+
+/* Warning - Orange */
+.progress-bar.warning {
+    background: linear-gradient(90deg, #f7971e, #ffd200);
+}
+
+/* Danger - Red */
+.progress-bar.danger {
+    background: linear-gradient(90deg, #cb2d3e, #ef473a);
+}
+
+/* ═══════════════════════════════════════════
+   BUDGET WARNING BADGES
+═══════════════════════════════════════════ */
+
+.badge-safe {
+    background-color: #28a745;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.badge-warning {
+    background-color: #ffc107;
+    color: #333;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+/* ═══════════════════════════════════════════
+   TABLES
+═══════════════════════════════════════════ */
+
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead {
+    background-color: #1a1a2e;
+    color: white;
+}
+
+.table thead th {
+    font-weight: 500;
+    padding: 12px 15px;
+    border: none;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.table tbody tr:hover {
+    background-color: #f0f4ff;
+}
+
+.table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Income row - green */
+.table .income-row {
+    border-left: 4px solid #28a745;
+}
+
+/* Expense row - red */
+.table .expense-row {
+    border-left: 4px solid #dc3545;
+}
+
+/* ═══════════════════════════════════════════
+   FORMS
+═══════════════════════════════════════════ */
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    font-size: 0.95rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+    outline: none;
+}
+
+label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+/* ═══════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════ */
+
+.btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-dark {
+    background-color: #1a1a2e;
+    color: white;
+}
+
+.btn-dark:hover {
+    background-color: #16213e;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: white;
+}
+
+.btn-success:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(56,239,125,0.3);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #cb2d3e, #ef473a);
+    color: white;
+}
+
+.btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239,71,58,0.3);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* ═══════════════════════════════════════════
+   LOGIN & REGISTER PAGES
+═══════════════════════════════════════════ */
+
+.auth-card {
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+    padding: 10px;
+}
+
+.auth-card h3 {
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+/* ═══════════════════════════════════════════
+   CATEGORY CARDS
+═══════════════════════════════════════════ */
+
+.category-card {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.category-card:hover {
+    transform: translateY(-2px);
+}
+
+.category-card h5 {
+    color: #1a1a2e;
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════
+   ALERTS & MESSAGES
+═══════════════════════════════════════════ */
+
+.alert {
+    border-radius: 10px;
+    padding: 12px 20px;
+    margin-bottom: 15px;
+    border: none;
+}
+
+.alert-danger {
+    background-color: #ffeaea;
+    color: #dc3545;
+    border-left: 4px solid #dc3545;
+}
+
+.alert-success {
+    background-color: #eafff3;
+    color: #28a745;
+    border-left: 4px solid #28a745;
+}
+
+.alert-warning {
+    background-color: #fff8e1;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+}
+
+/* ═══════════════════════════════════════════
+   SEARCH PAGE
+═══════════════════════════════════════════ */
+
+.search-card {
+    border-radius: 12px;
+    padding: 25px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
+
+/* ═══════════════════════════════════════════
+   DASHBOARD HEADER
+═══════════════════════════════════════════ */
+
+.dashboard-header {
+    margin-bottom: 25px;
+}
+
+.dashboard-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.dashboard-header p {
+    color: #888;
+    font-size: 0.95rem;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE MOBILE
+═══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .card h3 {
+        font-size: 1.5rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    .table {
+        font-size: 0.85rem;
+    }
+}
+/* ═══════════════════════════════════════════
+   ACCESSIBILITY (WCAG 2.2)
+═══════════════════════════════════════════ */
+
+/* 2.4.7 Focus Visible - keyboard navigation */
+*:focus {
+    outline: 3px solid #667eea !important;
+    outline-offset: 2px !important;
+}
+
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 3px solid #667eea !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.3) !important;
+}
+
+/* 1.4.3 Contrast - ensure text is readable */
+body {
+    color: #212529;         /* dark text high contrast */
+}
+
+.text-muted {
+    color: #595959 !important;  /* passes 4.5:1 ratio */
+}
+
+/* 1.4.1 Color not only feedback
+   always show text labels with colors */
+.budget-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-icon {
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+/* Over Budget - text + color */
+.status-over {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Near Limit - text + color */
+.status-near {
+    color: #856404;
+    font-weight: bold;
+}
+
+/* On Track - text + color */
+.status-safe {
+    color: #155724;
+    font-weight: bold;
+}
+
+/* 3.3.2 Labels visible on forms */
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Skip to main content link
+   for keyboard users */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #1a1a2e;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 0 0 5px 0;
+    z-index: 9999;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Footer */
+.footer {
+    background-color: #1a1a2e;
+    color: #ccc;
+    margin-top: 50px;
+}

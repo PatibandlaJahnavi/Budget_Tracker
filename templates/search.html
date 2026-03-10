@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="mb-4">Search Transactions</h2>
+
+<!-- Search Form -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET">
+
+            <div class="row">
+                <!-- Search by Date -->
+                <div class="col-md-3">
+                    <label>Date</label>
+                    <input type="date" name="date"
+                           class="form-control"
+                           value="{{ request.GET.date }}">
+                </div>
+
+                <!-- Search by Category -->
+                <div class="col-md-3">
+                    <label>Category</label>
+                    <select name="category" 
+                            class="form-control">
+                        <option value="">All Categories</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">
+                                {{ category.category_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Search by Type -->
+                <div class="col-md-3">
+                    <label>Type</label>
+                    <select name="type" class="form-control">
+                        <option value="">All</option>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+
+                <!-- Search Button -->
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" 
+                            class="btn btn-dark w-100">
+                        Search
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- Search Results -->
+<div class="card">
+    <div class="card-body">
+        <h5>Results</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.type }}</td>
+                    <td>{{ result.category }}</td>
+                    <td>${{ result.amount }}</td>
+                    <td>{{ result.date }}</td>
+                    <td>{{ result.description }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No results found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

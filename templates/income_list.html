@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Header -->
+<div class="dashboard-header">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2> Income List</h2>
+            <p>All your income transactions</p>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{% url 'add_income' %}"
+               class="btn btn-success">
+                + Add Income
+            </a>
+            <a href="{% url 'dashboard' %}"
+               class="btn btn-secondary ms-2">
+                ← Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Total Income Card -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5>Total Income</h5>
+                <h3>${{ total|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Income Table -->
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">All Income Transactions</h5>
+
+        {% if incomes %}
+        <table class="table" id="results-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for income in incomes %}
+                <tr class="income-row">
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <strong class="text-success">
+                            +${{ income.amount|floatformat:2 }}
+                        </strong>
+                    </td>
+                    <td>
+                        {% if income.category %}
+                            {{ income.category.category_name }}
+                        {% else %}
+                            Uncategorized
+                        {% endif %}
+                    </td>
+                    <td>{{ income.date }}</td>
+                    <td>
+                        {% if income.description %}
+                            {{ income.description }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_income' income.id %}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirmDelete(
+                           'Delete this income?')">
+                            🗑 Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+        <!-- No Income Yet -->
+        <div class="text-center py-5">
+            <h4 class="text-muted">No income added yet</h4>
+            <p class="text-muted">
+                Click "Add Income" to get started
+            </p>
+            <a href="{% url 'add_income' %}"
+               class="btn btn-success mt-2">
+                + Add Your First Income
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

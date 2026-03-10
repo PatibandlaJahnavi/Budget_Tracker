@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card mt-5">
+            <div class="card-body">
+
+                <h3 class="text-center mb-4">Register</h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <!-- Full Name -->
+                    <div class="mb-3">
+                        <label>Username</label>
+                        {{ form.username }}
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label>Password</label>
+                        {{ form.password1 }}
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        <label>Confirm Password</label>
+                        {{ form.password2 }}
+                    </div>
+
+                    <!-- Errors -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.errors }}
+                        </div>
+                    {% endif %}
+
+                    <!-- Submit Button -->
+                    <button type="submit" 
+                            class="btn btn-dark w-100">
+                        Register
+                    </button>
+
+                    <p class="text-center mt-3">
+                        Already have an account? 
+                        <a href="{% url 'login' %}">Login</a>
+                    </p>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

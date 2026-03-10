@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════ -->
+<div class="dashboard-header">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2> Category Limits</h2>
+            <p class="text-muted">
+                Manage your spending categories
+                and budget limits
+            </p>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{% url 'dashboard' %}"
+               class="btn btn-secondary">
+                ← Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ADD CATEGORY FORM
+═══════════════════════════════════════════ -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="mb-3"> Add New Category</h5>
+
+        <form method="POST"
+              action="{% url 'add_category' %}">
+            {% csrf_token %}
+            <div class="row">
+
+                <!-- Category Name -->
+                <div class="col-md-4 mb-3">
+                    <label for="category_name">
+                        Category Name
+                    </label>
+                    <input type="text"
+                           id="category_name"
+                           name="category_name"
+                           class="form-control"
+                           placeholder="e.g. Food, Transport"
+                           required
+                           aria-required="true">
+                </div>
+
+                <!-- Type -->
+                <div class="col-md-3 mb-3">
+                    <label for="category_type">
+                        Type
+                    </label>
+                    <select id="category_type"
+                            name="type"
+                            class="form-control"
+                            required
+                            aria-required="true"
+                            aria-label="Category type">
+                        <option value="">
+                            -- Select Type --
+                        </option>
+                        <option value="expense">
+                             Expense
+                        </option>
+                        <option value="income">
+                             Income
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div class="col-md-3 mb-3">
+                    <label for="category_desc">
+                        Description (optional)
+                    </label>
+                    <input type="text"
+                           id="category_desc"
+                           name="description"
+                           class="form-control"
+                           placeholder="Brief description">
+                </div>
+
+                <!-- Submit -->
+                <div class="col-md-2 mb-3 mt-4">
+                    <button type="submit"
+                            class="btn btn-dark w-100">
+                        Add
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SET BUDGET LIMIT FORM
+═══════════════════════════════════════════ -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="mb-3"> Set Budget Limit</h5>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row">
+
+                <!-- Category -->
+                <div class="col-md-3 mb-3">
+                    <label for="id_category">
+                        Category
+                    </label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div class="text-danger
+                                    small mt-1"
+                             role="alert"
+                             aria-live="polite">
+                            {{ form.category.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Limit Amount -->
+                <div class="col-md-2 mb-3">
+                    <label for="id_limit_amount">
+                        Limit Amount ($)
+                    </label>
+                    {{ form.limit_amount }}
+                    {% if form.limit_amount.errors %}
+                        <div class="text-danger
+                                    small mt-1"
+                             role="alert"
+                             aria-live="polite">
+                            {{ form.limit_amount.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Period -->
+                <div class="col-md-2 mb-3">
+                    <label for="id_period">
+                        Period
+                    </label>
+                    {{ form.period }}
+                    {% if form.period.errors %}
+                        <div class="text-danger
+                                    small mt-1"
+                             role="alert"
+                             aria-live="polite">
+                            {{ form.period.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Warning Threshold -->
+                <div class="col-md-2 mb-3">
+                    <label for="id_warning_threshold">
+                        Warning at (%)
+                    </label>
+                    {{ form.warning_threshold }}
+                    {% if form.warning_threshold.errors %}
+                        <div class="text-danger
+                                    small mt-1"
+                             role="alert"
+                             aria-live="polite">
+                            {{ form.warning_threshold.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Start Date -->
+                <div class="col-md-2 mb-3">
+                    <label for="id_start_date">
+                        Start Date
+                    </label>
+                    {{ form.start_date }}
+                    {% if form.start_date.errors %}
+                        <div class="text-danger
+                                    small mt-1"
+                             role="alert"
+                             aria-live="polite">
+                            {{ form.start_date.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit -->
+                <div class="col-md-1 mb-3 mt-4">
+                    <button type="submit"
+                            class="btn btn-dark w-100">
+                        Set
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     BUDGET LIMITS LIST
+═══════════════════════════════════════════ -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="mb-4"> Budget Limits & Usage</h5>
+
+        {% if limits %}
+            {% for limit in limits %}
+            <div class="category-card mb-3">
+                <div class="row align-items-center">
+
+                    <!-- Category Name & Status -->
+                    <div class="col-md-3">
+                        <h5 class="mb-1">
+                            {{ limit.category.category_name }}
+                        </h5>
+                        <small class="text-muted">
+                            {{ limit.period|title }} limit
+                        </small>
+                    </div>
+
+                    <!-- Amounts -->
+                    <div class="col-md-2 text-center">
+                        <small class="text-muted d-block">
+                            Spent / Limit
+                        </small>
+                        <strong>
+                            ${{ limit.total_spent|floatformat:2 }}
+                            /
+                            ${{ limit.limit_amount|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="col-md-4">
+                        <div class="d-flex
+                                    justify-content-between
+                                    mb-1">
+                            <small>Usage</small>
+                            <small>
+                                <strong>
+                                    {{ limit.used_percent }}%
+                                </strong>
+                            </small>
+                        </div>
+                        <div class="progress"
+                             role="progressbar"
+                             aria-valuenow="{{ limit.used_percent }}"
+                             aria-valuemin="0"
+                             aria-valuemax="100"
+                             aria-label="{{ limit.category.category_name }} budget usage">
+                            <div class="progress-bar
+                                {% if limit.used_percent >= 100 %}
+                                    danger
+                                {% elif limit.used_percent >= 80 %}
+                                    warning
+                                {% else %}
+                                    safe
+                                {% endif %}"
+                                data-percent="{{ limit.used_percent }}"
+                                style="width:
+                                    {% if limit.used_percent > 100 %}
+                                        100
+                                    {% else %}
+                                        {{ limit.used_percent }}
+                                    {% endif %}%">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Badge -->
+                    <div class="col-md-2 text-center">
+
+                        <!-- 1.4.1 Color not only
+                             feedback - text + color -->
+                        {% if limit.used_percent >= 100 %}
+                            <span class="status-over"
+                                  role="status"
+                                  aria-live="polite">
+                                 Over Budget
+                            </span>
+
+                        {% elif limit.used_percent >= 80 %}
+                            <span class="status-near"
+                                  role="status"
+                                  aria-live="polite">
+                                 Near Limit
+                            </span>
+
+                        {% else %}
+                            <span class="status-safe"
+                                  role="status"
+                                  aria-live="polite">
+                                 On Track
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                    <!-- Delete Button -->
+                    <div class="col-md-1 text-end">
+                        <a href="{% url 'delete_limit' limit.id %}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirmDelete(
+                           'Remove this budget limit?')"
+                           aria-label="Delete budget limit for
+                           {{ limit.category.category_name }}">
+                            🗑
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+
+        {% else %}
+        <!-- No Limits Yet -->
+        <div class="text-center py-5">
+            <h5 class="text-muted">
+                No budget limits set yet
+            </h5>
+            <p class="text-muted">
+                Use the form above to set
+                spending limits for categories
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CATEGORIES LIST
+═══════════════════════════════════════════ -->
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-4"> Your Categories</h5>
+
+        {% if categories %}
+        <table class="table"
+               aria-label="Categories list">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <strong>
+                            {{ category.category_name }}
+                        </strong>
+                    </td>
+                    <td>
+                        {% if category.type == 'expense' %}
+                            <span class="badge-danger">
+                                 Expense
+                            </span>
+                        {% else %}
+                            <span class="badge-safe">
+                                 Income
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if category.description %}
+                            {{ category.description }}
+                        {% else %}
+                            <span class="text-muted">
+                                No description
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_category' category.id %}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirmDelete(
+                           'Delete this category? This may affect existing transactions.')"
+                           aria-label="Delete category
+                           {{ category.category_name }}">
+                            🗑 Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+        <!-- No Categories Yet -->
+        <div class="text-center py-4">
+            <h5 class="text-muted">
+                No categories added yet
+            </h5>
+            <p class="text-muted">
+                Add a category using the form above
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

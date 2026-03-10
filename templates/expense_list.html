@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Header -->
+<div class="dashboard-header">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2> Expense List</h2>
+            <p>All your expense transactions</p>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{% url 'add_expense' %}"
+               class="btn btn-danger">
+                + Add Expense
+            </a>
+            <a href="{% url 'dashboard' %}"
+               class="btn btn-secondary ms-2">
+                ← Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+
+    <!-- Total Expenses -->
+    <div class="col-md-4">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <h5>Total Expenses</h5>
+                <h3>-${{ total|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Transactions -->
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5>Total Transactions</h5>
+                <h3>{{ expenses|length }}</h3>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Expense Table -->
+<div class="card">
+    <div class="card-body">
+
+        <!-- Search Bar -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <h5>All Expense Transactions</h5>
+            </div>
+            <div class="col-md-6">
+                <input type="text"
+                       id="live-search"
+                       class="form-control"
+                       placeholder=" Search expenses...">
+            </div>
+        </div>
+
+        {% if expenses %}
+        <table class="table" id="results-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr class="expense-row">
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <strong class="text-danger">
+                            -${{ expense.amount|floatformat:2 }}
+                        </strong>
+                    </td>
+                    <td>
+                        {% if expense.category %}
+                            {{ expense.category.category_name }}
+                        {% else %}
+                            Uncategorized
+                        {% endif %}
+                    </td>
+                    <td>{{ expense.date }}</td>
+                    <td>
+                        {% if expense.description %}
+                            {{ expense.description }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_expense' expense.id %}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirmDelete(
+                           'Delete this expense?')">
+                            🗑 Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% else %}
+        <!-- No Expenses Yet -->
+        <div class="text-center py-5">
+            <h4 class="text-muted">No expenses added yet</h4>
+            <p class="text-muted">
+                Click "Add Expense" to get started
+            </p>
+            <a href="{% url 'add_expense' %}"
+               class="btn btn-danger mt-2">
+                + Add Your First Expense
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
