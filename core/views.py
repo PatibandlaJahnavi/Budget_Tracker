@@ -75,7 +75,6 @@ def dashboard(request):
     user = request.user
     today = datetime.date.today()
 
-    # ── Totals ────────────────────────────────────────────
     total_income = Income.objects.filter(
         user=user
     ).aggregate(Sum('amount'))['amount__sum'] or 0
@@ -86,7 +85,6 @@ def dashboard(request):
 
     balance = total_income - total_expense
 
-    # ── Daily Allowance ───────────────────────────────────
     if today.month == 12:
         next_month = today.replace(
             year=today.year + 1, month=1, day=1)
@@ -98,21 +96,23 @@ def dashboard(request):
     daily_allowance = (float(balance) / days_left
                        if days_left > 0 else 0)
 
-    # ── Recent Transactions ───────────────────────────────
     recent_expenses = Expense.objects.filter(
-        user=user).order_by('-date')[:5]
+        user=user
+    ).select_related('category').order_by('-date')[:5]
 
     recent_incomes = Income.objects.filter(
-        user=user).order_by('-date')[:5]
+        user=user
+    ).select_related('category').order_by('-date')[:5]
 
-    # ── Upcoming Bills ────────────────────────────────────
     upcoming_bills = Bill.objects.filter(
         user=user,
         due_date__gte=today
     ).order_by('due_date')[:5]
 
-    # ── Category Limits ───────────────────────────────────
-    limits = BudgetLimit.objects.filter(user=user)
+    limits = BudgetLimit.objects.filter(
+        user=user
+    ).select_related('category')
+
     for limit in limits:
         total_spent = Expense.objects.filter(
             user=user,
@@ -128,7 +128,6 @@ def dashboard(request):
 
         limit.total_spent = total_spent
 
-    # ── Chart Data ────────────────────────────────────────
     expenses_by_category = Expense.objects.filter(
         user=user,
         date__month=today.month,
@@ -249,7 +248,7 @@ def add_expense(request):
 def expense_list(request):
     expenses = Expense.objects.filter(
         user=request.user
-    ).order_by('-date')
+    ).select_related('category').order_by('-date')
 
     total = expenses.aggregate(
         Sum('amount'))['amount__sum'] or 0
@@ -444,13 +443,16 @@ def search_view(request):
 
     if type_filter == 'income':
         queryset = Income.objects.filter(
-            user=request.user)
+            user=request.user
+        ).select_related('category')
     elif type_filter == 'expense':
         queryset = Expense.objects.filter(
-            user=request.user)
+            user=request.user
+        ).select_related('category')
     else:
         queryset = Expense.objects.filter(
-            user=request.user)
+            user=request.user
+        ).select_related('category')
 
     if date:
         queryset = queryset.filter(date=date)
