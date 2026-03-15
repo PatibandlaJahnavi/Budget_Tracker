@@ -168,9 +168,7 @@
     </div>
 </nav>
 
-<!-- ═══════════════════════════════════════════
-     MESSAGES
-═══════════════════════════════════════════ -->
+<!-- MESSAGES -->
 <div class="container mt-3">
     {% if messages %}
         {% for message in messages %}
@@ -223,18 +221,14 @@
     {% endif %}
 </div>
 
-<!-- ═══════════════════════════════════════════
-     MAIN CONTENT
-═══════════════════════════════════════════ -->
+<!-- MAIN CONTENT -->
 <div class="container mt-4 mb-5"
      id="main-content">
     {% block content %}
     {% endblock %}
 </div>
 
-<!-- ═══════════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════════ -->
+<!-- FOOTER -->
 <footer class="footer mt-auto py-3">
     <div class="container text-center">
         <span class="text-muted">

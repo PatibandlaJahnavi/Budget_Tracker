@@ -2,7 +2,7 @@ from django import forms
 from .models import Income, Expense, BudgetLimit, Bill, Category
 
 
-# ─── Income Form ─────────────────────────────────────────
+# ── Income Form ─────────────────────────────────────────
 class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
