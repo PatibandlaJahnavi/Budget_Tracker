@@ -1,9 +1,4 @@
-// ═══════════════════════════════════════════
-//   FINANCE TRACKER - MAIN JAVASCRIPT
-// ═══════════════════════════════════════════
-
-
-// ── 1. Auto Hide Alert Messages ──────────────
+//  1. Auto Hide Alert Messages
 // Automatically hides success/error messages
 // after 3 seconds
 
@@ -21,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── 2. Progress Bar Colors ───────────────────
+//  2. Progress Bar Colors
 // Changes progress bar color based on percentage
 // Green = safe, Orange = warning, Red = over budget
 
@@ -44,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── 3. Confirm Delete ────────────────────────
+//  3. Confirm Delete
 // Shows confirmation popup before deleting
 // anything important
 
@@ -67,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── 5. Form Validation ───────────────────────
+//  5. Form Validation
 // Checks that amount is greater than 0
 // before submitting the form
 
@@ -91,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── 6. Dashboard Chart ───────────────────────
+//  6. Dashboard Chart
 // Draws pie chart on dashboard if canvas exists
 // Uses Chart.js library
 
@@ -143,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── 7. Balance Color ─────────────────────────
+//  7. Balance Color
 // Makes balance text red if negative
 // and green if positive
 
@@ -162,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── 8. Search Filter Live ────────────────────
+//  8. Search Filter Live
 // Filters table rows as user types in search box
 
 document.addEventListener('DOMContentLoaded', function() {
