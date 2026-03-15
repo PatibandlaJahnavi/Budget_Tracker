@@ -244,6 +244,50 @@
 <script src="{% static 'js/main.js' %}"></script>
 
 {% block extra_js %}{% endblock %}
+<!-- Cookie Notice -->
+<div id="cookieNotice"
+     style="display:none;
+            position:fixed;
+            bottom:0;
+            width:100%;
+            background:#1a1a2e;
+            color:white;
+            padding:15px;
+            text-align:center;
+            z-index:9999;">
+
+    This website uses cookies to keep
+    you logged in and improve your experience.
+
+    <button onclick="acceptCookies()"
+            class="btn btn-light btn-sm ms-3">
+        Accept
+    </button>
+</div>
+
+<script>
+// Show cookie notice if not accepted
+function checkCookies() {
+    if (!localStorage.getItem(
+        'cookiesAccepted')) {
+        document.getElementById(
+            'cookieNotice'
+        ).style.display = 'block';
+    }
+}
+
+// Hide notice when accepted
+function acceptCookies() {
+    localStorage.setItem(
+        'cookiesAccepted', 'true');
+    document.getElementById(
+        'cookieNotice'
+    ).style.display = 'none';
+}
+
+// Check on page load
+checkCookies();
+</script>
 
 </body>
 </html>
