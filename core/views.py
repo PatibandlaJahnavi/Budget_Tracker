@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import (UserCreationForm,
                                         AuthenticationForm)
 from django.contrib import messages
+from django.conf import settings
 from django.db.models import Sum
 from django.contrib.auth.models import User
 import datetime
@@ -20,11 +21,24 @@ from .models import (Income, Expense, Bill,
 #   AUTHENTICATION VIEWS
 
 def register_view(request):
+    # Check if registration is open
+    if not settings.REGISTRATION_OPEN:
+        messages.error(request,
+                       'Registration is currently closed!')
+        return redirect('login')
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
+
+        # check all fields filled
+        if not username or not password1 \
+                or not password2:
+            messages.error(request,
+                           'Please fill all fields!')
+            return render(request,
+                          'register.html', {})
 
         # Check username already exists
         if User.objects.filter(
@@ -58,12 +72,6 @@ def register_view(request):
             return render(request,
                 'register.html', {})
 
-        # Check email is not empty
-        if not email:
-            messages.error(request,
-                'Email is required!')
-            return render(request,
-                'register.html', {})
 
         # Create user with email
         user = User.objects.create_user(
@@ -72,21 +80,31 @@ def register_view(request):
             password=password1
         )
         user.save()
+        # Auto login after registration
+        # uses REGISTRATION_AUTO_LOGIN
+        if settings.REGISTRATION_AUTO_LOGIN:
+            login(request, user)
+            messages.success(request,
+                             f'Welcome {username}! '
+                             f'Account created successfully!')
+            return redirect(
+                settings.LOGIN_REDIRECT_URL
+            )
+        else:
+            messages.success(request,
+                             'Account created! Please login.')
+            return redirect('login')
 
-        # Log user in automatically
-        login(request, user)
-        messages.success(request,
-            'Account created successfully!')
-        return redirect('dashboard')
-
-    return render(request, 'register.html', {})
+    return render(request,
+                  'register.html', {})
 
 
 def login_view(request):
-    # if user already logged in
-    # redirect to dashboard
+    # already logged in
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect(
+            settings.LOGIN_REDIRECT_URL
+        )
 
     if request.method == 'POST':
 
@@ -143,8 +161,10 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request,
-        'Logged out successfully.')
-    return redirect('login')
+        'Logged out successfully!')
+    return redirect(
+        settings.LOGOUT_REDIRECT_URL
+    )
 
 #   DASHBOARD VIEW
 

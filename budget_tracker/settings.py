@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'registration',
 ]
 
 MIDDLEWARE = [
@@ -163,3 +164,25 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Enables XSS filtering in browser
 SECURE_BROWSER_XSS_FILTER = True
+
+#Registration Settins
+# If True, users can register
+# Set False to disable registration
+REGISTRATION_OPEN = True
+
+# If True, user is automatically
+# logged in after registering
+REGISTRATION_AUTO_LOGIN = True
+
+# The URL Django redirects users
+# to after logging in
+LOGIN_REDIRECT_URL = '/dashboard/'
+
+# The page users are directed to
+# if they are not logged in
+# Used by @login_required decorator
+LOGIN_URL = '/login/'
+
+# The page users are directed to
+# after logging out
+LOGOUT_REDIRECT_URL = '/login/'

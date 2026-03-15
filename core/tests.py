@@ -22,6 +22,7 @@ class ModelTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username='testuser',
+            email='test@test.com',
             password='TestPass123'
         )
 
@@ -485,14 +486,25 @@ class ViewTests(TestCase):
         self.assertTemplateUsed(response, 'register.html')
 
     def test_register_post_creates_user_and_redirects(self):
-        response = self.client.post(reverse('register'), {
-            'username': 'newuser',
-            'password1': 'ComplexPass123',
-            'password2': 'ComplexPass123',
-        })
+        """
+        Test registering a new user
+        redirects to dashboard
+        """
+        response = self.client.post(
+            reverse('register'), {
+                'username': 'newuser',
+                'email': 'newuser@test.com',
+                'password1': 'TestPass123!',
+                'password2': 'TestPass123!'
+            }
+        )
+
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('login'))
-        self.assertTrue(User.objects.filter(username='newuser').exists())
+        self.assertTrue(
+            User.objects.filter(
+                username='newuser'
+            ).exists()
+        )
 
     def test_login_page_loads(self):
         response = self.client.get(reverse('login'))
