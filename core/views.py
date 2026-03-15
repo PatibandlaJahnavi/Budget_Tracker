@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (UserCreationForm,
                                         AuthenticationForm)
 from django.contrib import messages
 from django.db.models import Sum
+from django.contrib.auth.models import User
 import datetime
 import json
 from .models import (Income, Expense, Bill,
@@ -21,42 +22,124 @@ from .models import (Income, Expense, Bill,
 # ═══════════════════════════════════════════════════════════
 
 def register_view(request):
-    if request.user.is_authenticated:
-        return redirect('dashboard')
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request,
-                'Account created! Please login.')
-            return redirect('login')
-        else:
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        # Check username already exists
+        if User.objects.filter(
+            username=username
+        ).exists():
             messages.error(request,
-                'Registration failed. Try again.')
-    else:
-        form = UserCreationForm()
-    return render(request,
-                  'register.html', {'form': form})
+                'Username already taken!')
+            return render(request,
+                'register.html', {})
+
+        # Check email already exists
+        if User.objects.filter(
+            email=email
+        ).exists():
+            messages.error(request,
+                'Email already registered!')
+            return render(request,
+                'register.html', {})
+
+        # Check passwords match
+        if password1 != password2:
+            messages.error(request,
+                'Passwords do not match!')
+            return render(request,
+                'register.html', {})
+
+        # Check password length
+        if len(password1) < 8:
+            messages.error(request,
+                'Password must be at least 8 characters!')
+            return render(request,
+                'register.html', {})
+
+        # Check email is not empty
+        if not email:
+            messages.error(request,
+                'Email is required!')
+            return render(request,
+                'register.html', {})
+
+        # Create user with email
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password1
+        )
+        user.save()
+
+        # Log user in automatically
+        login(request, user)
+        messages.success(request,
+            'Account created successfully!')
+        return redirect('dashboard')
+
+    return render(request, 'register.html', {})
 
 
 def login_view(request):
+    # if user already logged in
+    # redirect to dashboard
     if request.user.is_authenticated:
         return redirect('dashboard')
+
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            messages.success(request,
-                f'Welcome back, {user.username}!')
-            return redirect('dashboard')
+
+        # Step 1: get username and password
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Step 2: check if fields are empty
+        if not username or not password:
+            messages.error(request,
+                'Please enter username and password!')
+            return render(request,
+                'login.html', {})
+
+        # Step 3: check credentials in database
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        # Step 4: if user found → login
+        if user is not None:
+
+            # check if account is active
+            if user.is_active:
+                login(request, user)
+                messages.success(request,
+                    f'Welcome back, {username}!')
+
+                # redirect to next page
+                # or dashboard
+                next_url = request.GET.get(
+                    'next', 'dashboard')
+                return redirect(next_url)
+            else:
+                messages.error(request,
+                    'Your account is disabled!')
+                return render(request,
+                    'login.html', {})
+
+        # Step 5: if user not found → error
         else:
             messages.error(request,
-                'Invalid username or password.')
-    else:
-        form = AuthenticationForm()
-    return render(request,
-                  'login.html', {'form': form})
+                'Invalid username or password!')
+            return render(request,
+                'login.html', {})
+
+    # GET request → show login page
+    return render(request, 'login.html', {})
+
 
 
 def logout_view(request):
@@ -477,6 +560,98 @@ def search_view(request):
         'amount_min': amount_min,
         'amount_max': amount_max,
     })
+# VIEW PROFILE
+@login_required
+def profile(request):
+    user = request.user
+    # count user's data
+    total_income = Income.objects.filter(
+        user=user
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    total_expense = Expense.objects.filter(
+        user=user
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    total_transactions = (
+        Income.objects.filter(user=user).count() +
+        Expense.objects.filter(user=user).count()
+    )
+
+    return render(request, 'profile.html', {
+        'total_income': total_income,
+        'total_expense': total_expense,
+        'total_transactions': total_transactions,
+        'balance': total_income - total_expense,
+    })
+
+#EDIT PROFILE
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user = request.user
+
+        # get form data
+        email = request.POST.get('email', '')
+        new_username = request.POST.get(
+            'username', '')
+        new_password = request.POST.get(
+            'new_password', '')
+        confirm_password = request.POST.get(
+            'confirm_password', '')
+
+        # check username taken by another user
+        if new_username != user.username:
+            if User.objects.filter(
+                username=new_username
+            ).exclude(id=user.id).exists():
+                messages.error(request,
+                    'Username already taken!')
+                return render(request,
+                    'edit_profile.html', {})
+
+        # check email taken by another user
+        if email != user.email:
+            if User.objects.filter(
+                email=email
+            ).exclude(id=user.id).exists():
+                messages.error(request,
+                    'Email already registered!')
+                return render(request,
+                    'edit_profile.html', {})
+
+        # update user details
+
+        user.email = email
+        user.username = new_username
+        user.save()
+
+        # update password if provided
+        if new_password:
+            if new_password != confirm_password:
+                messages.error(request,
+                    'Passwords do not match!')
+                return render(request,
+                    'edit_profile.html', {})
+
+            if len(new_password) < 8:
+                messages.error(request,
+                    'Password must be 8+ characters!')
+                return render(request,
+                    'edit_profile.html', {})
+
+            user.set_password(new_password)
+            user.save()
+            # re-login after password change
+            login(request, user)
+
+        messages.success(request,
+            'Profile updated successfully!')
+        return redirect('profile')
+
+    return render(request,
+                  'edit_profile.html', {})
+
 
 
 # ═══════════════════════════════════════════════════════════

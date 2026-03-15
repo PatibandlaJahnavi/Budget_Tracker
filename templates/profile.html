@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="dashboard-header">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2>👤 My Profile</h2>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{% url 'edit_profile' %}"
+               class="btn btn-dark">
+                ✏️ Edit Profile
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Details Card -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="mb-4">
+                    Account Details
+                </h5>
+
+                <!-- Username -->
+                <div class="mb-3 row">
+                    <label class="col-sm-4
+                                  text-muted">
+                        Username
+                    </label>
+                    <div class="col-sm-8">
+                        <strong>
+                            {{ user.username }}
+                        </strong>
+                    </div>
+                </div>
+
+
+
+                <!-- Email -->
+                <div class="mb-3 row">
+                    <label class="col-sm-4
+                                  text-muted">
+                        Email
+                    </label>
+                    <div class="col-sm-8">
+                        <strong>
+                            {{ user.email|default:"Not set" }}
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- Member Since -->
+                <div class="mb-3 row">
+                    <label class="col-sm-4
+                                  text-muted">
+                        Member Since
+                    </label>
+                    <div class="col-sm-8">
+                        <strong>
+                            {{ user.date_joined|date:"d M Y" }}
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- Last Login -->
+                <div class="mb-3 row">
+                    <label class="col-sm-4
+                                  text-muted">
+                        Last Login
+                    </label>
+                    <div class="col-sm-8">
+                        <strong>
+                            {{ user.last_login|date:"d M Y H:i" }}
+                        </strong>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Card -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="mb-4">
+                    My Statistics
+                </h5>
+
+                <!-- Balance -->
+                <div class="mb-3 row">
+                    <label class="col-sm-6
+                                  text-muted">
+                        Current Balance
+                    </label>
+                    <div class="col-sm-6">
+                        <strong class="
+                        {% if balance >= 0 %}
+                            text-success
+                        {% else %}
+                            text-danger
+                        {% endif %}">
+                            £{{ balance|floatformat:2 }}
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- Total Income -->
+                <div class="mb-3 row">
+                    <label class="col-sm-6
+                                  text-muted">
+                        Total Income
+                    </label>
+                    <div class="col-sm-6">
+                        <strong class="text-success">
+                            £{{ total_income|floatformat:2 }}
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- Total Expense -->
+                <div class="mb-3 row">
+                    <label class="col-sm-6
+                                  text-muted">
+                        Total Expenses
+                    </label>
+                    <div class="col-sm-6">
+                        <strong class="text-danger">
+                            £{{ total_expense|floatformat:2 }}
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- Total Transactions -->
+                <div class="mb-3 row">
+                    <label class="col-sm-6
+                                  text-muted">
+                        Total Transactions
+                    </label>
+                    <div class="col-sm-6">
+                        <strong>
+                            {{ total_transactions }}
+                        </strong>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

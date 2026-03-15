@@ -11,22 +11,38 @@
                 <form method="POST">
                     {% csrf_token %}
 
-                    <!-- Email -->
+                    <!-- Username -->
                     <div class="mb-3">
-                        <label>Username</label>
-                        {{ form.username }}
+                        <label for="username">Username</label>
+
+                        <input type="text" id="username"
+                               name="username" class="form-control"
+                               placeholder="Enter Username" required>
+
                     </div>
+
 
                     <!-- Password -->
                     <div class="mb-3">
                         <label>Password</label>
-                        {{ form.password }}
+                        <div class="input-group">
+                            <input type="password" id="password"
+                                   name="password" class="form-control"
+                                   placeholder="Enter password" required>
+                            <!-- Eye button -->
+                            <button class="btn btn-outline-secondary"
+                                    type="button"
+                                    id="togglePassword"
+                                    aria-label="Show or hide password">
+                                 👁
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Errors -->
                     {% if form.errors %}
                         <div class="alert alert-danger">
-                            Invalid username or password
+                            Invalid email or password
                         </div>
                     {% endif %}
 
@@ -46,5 +62,23 @@
         </div>
     </div>
 </div>
+    <!-- Show/Hide Password Script -->
+<script>
+document.getElementById('togglePassword')
+    .addEventListener('click', function() {
+
+        const password = document.getElementById(
+            'password');
+
+        // toggle between password and text
+        if (password.type === 'password') {
+            password.type = 'text';
+            this.textContent = '🙈';
+        } else {
+            password.type = 'password';
+            this.textContent = '👁';
+        }
+    });
+</script>
 
 {% endblock %}

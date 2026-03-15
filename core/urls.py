@@ -57,6 +57,12 @@ urlpatterns = [
          views.savings_goals, name='savings_goals'),
     path('savings/delete/<int:goal_id>/',
          views.delete_goal, name='delete_goal'),
+    path('profile/',
+         views.profile,
+         name='profile'),
+    path('profile/edit/',
+         views.edit_profile,
+         name='edit_profile'),
 
     # ── Subscriptions ─────────────────────────
     path('subscriptions/',

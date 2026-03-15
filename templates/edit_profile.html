@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="dashboard-header">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2>✏️ Edit Profile</h2>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{% url 'profile' %}"
+               class="btn btn-secondary">
+                ← Back to Profile
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Messages -->
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert
+        {% if message.tags == 'error' %}
+            alert-danger
+        {% else %}
+            alert-success
+        {% endif %} mt-3">
+        {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Edit Form -->
+<div class="card mt-4">
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row">
+
+
+
+
+
+                <!-- Username -->
+                <div class="col-md-6 mb-3">
+                    <label for="username">
+                        Username
+                    </label>
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           class="form-control"
+                           value="{{ user.username }}"
+                           required>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6 mb-3">
+                    <label for="email">
+                        Email Address
+                    </label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           class="form-control"
+                           value="{{ user.email }}"
+                           placeholder="Enter email">
+                </div>
+
+                <hr class="my-3">
+                <h6 class="text-muted mb-3">
+                    Change Password
+                    (leave blank to keep current)
+                </h6>
+
+                <!-- New Password -->
+                <div class="col-md-6 mb-3">
+                    <label for="new_password">
+                        New Password
+                    </label>
+                    <div class="input-group">
+                        <input type="password"
+                               id="new_password"
+                               name="new_password"
+                               class="form-control"
+                               placeholder="Enter new password">
+                        <button class="btn btn-outline-secondary"
+                                type="button"
+                                id="toggleNew"
+                                aria-label="Show password">
+                            👁
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="col-md-6 mb-3">
+                    <label for="confirm_password">
+                        Confirm Password
+                    </label>
+                    <div class="input-group">
+                        <input type="password"
+                               id="confirm_password"
+                               name="confirm_password"
+                               class="form-control"
+                               placeholder="Confirm new password">
+                        <button class="btn btn-outline-secondary"
+                                type="button"
+                                id="toggleConfirm"
+                                aria-label="Show password">
+                            👁
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Save Button -->
+            <div class="text-end mt-3">
+                <a href="{% url 'profile' %}"
+                   class="btn btn-secondary me-2">
+                    Cancel
+                </a>
+                <button type="submit"
+                        class="btn btn-dark">
+                    💾 Save Changes
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+// Toggle new password
+document.getElementById('toggleNew')
+    .addEventListener('click', function() {
+        const pwd = document.getElementById(
+            'new_password');
+        if (pwd.type === 'password') {
+            pwd.type = 'text';
+            this.textContent = '🙈';
+        } else {
+            pwd.type = 'password';
+            this.textContent = '👁';
+        }
+    });
+
+// Toggle confirm password
+document.getElementById('toggleConfirm')
+    .addEventListener('click', function() {
+        const pwd = document.getElementById(
+            'confirm_password');
+        if (pwd.type === 'password') {
+            pwd.type = 'text';
+            this.textContent = '🙈';
+        } else {
+            pwd.type = 'password';
+            this.textContent = '👁';
+        }
+    });
+</script>
+
+{% endblock %}
