@@ -2,7 +2,7 @@ from django import forms
 from .models import Income, Expense, BudgetLimit, Bill, Category
 
 
-# ── Income Form ─────────────────────────────────────────
+#  Income Form
 class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
@@ -27,7 +27,7 @@ class IncomeForm(forms.ModelForm):
         }
 
 
-# ─── Expense Form ─────────────────────────────────────────
+# Expense Form
 class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
@@ -52,7 +52,7 @@ class ExpenseForm(forms.ModelForm):
         }
 
 
-# ─── Budget Limit Form ────────────────────────────────────
+#  Budget Limit Form
 class BudgetLimitForm(forms.ModelForm):
     class Meta:
         model = BudgetLimit
@@ -80,7 +80,7 @@ class BudgetLimitForm(forms.ModelForm):
         }
 
 
-# ─── Bill Form ────────────────────────────────────────────
+# Bill Form
 class BillForm(forms.ModelForm):
     class Meta:
         model = Bill

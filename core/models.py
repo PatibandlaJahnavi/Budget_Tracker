@@ -114,7 +114,7 @@ class SavingsGoal(models.Model):
         return self.goal_name
 
 
-# ── Subscription Model (from ER Diagram) ──────────────────
+#  Subscription Model
 class Subscription(models.Model):
     STATUS_CHOICES = [
         ('active', 'Active'),

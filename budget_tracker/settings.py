@@ -127,7 +127,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 
-# ── Session Cookie Settings ───────────────
+#  Session Cookie Settings
 # Session expires when browser closes
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
@@ -144,7 +144,7 @@ SESSION_COOKIE_HTTPONLY = True
 # Cookie name
 SESSION_COOKIE_NAME = 'sessionid'
 
-# ── CSRF Cookie Settings ──────────────────
+#  CSRF Cookie Settings
 # CSRF cookie only sent over HTTPS
 # (set True in production)
 CSRF_COOKIE_SECURE = False
@@ -155,7 +155,7 @@ CSRF_COOKIE_HTTPONLY = False
 # CSRF cookie age (1 year in seconds)
 CSRF_COOKIE_AGE = 31449600
 
-# ── Security Settings ─────────────────────
+#  Security Settings
 # Prevents clickjacking
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
