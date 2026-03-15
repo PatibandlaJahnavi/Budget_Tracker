@@ -9,17 +9,15 @@ from django.db.models import Sum
 from django.contrib.auth.models import User
 import datetime
 import json
-from .models import (Income, Expense, Bill,
-                     Category, BudgetLimit, SavingsGoal)
+
 from .forms import (IncomeForm, ExpenseForm,
                     BudgetLimitForm, BillForm)
 from .models import (Income, Expense, Bill,
                      Category, BudgetLimit,
-                     SavingsGoal, Subscription) # ← add
+                     SavingsGoal, Subscription)
 
-# ═══════════════════════════════════════════════════════════
+
 #   AUTHENTICATION VIEWS
-# ═══════════════════════════════════════════════════════════
 
 def register_view(request):
     if request.method == 'POST':
@@ -148,10 +146,7 @@ def logout_view(request):
         'Logged out successfully.')
     return redirect('login')
 
-
-# ═══════════════════════════════════════════════════════════
 #   DASHBOARD VIEW
-# ═══════════════════════════════════════════════════════════
 
 @login_required
 def dashboard(request):
@@ -243,10 +238,8 @@ def dashboard(request):
         'today': today,
     })
 
-
-# ═══════════════════════════════════════════════════════════
 #   INCOME VIEWS
-# ═══════════════════════════════════════════════════════════
+
 
 @login_required
 def add_income(request):
@@ -297,10 +290,7 @@ def delete_income(request, income_id):
         'Income deleted successfully!')
     return redirect('income_list')
 
-
-# ═══════════════════════════════════════════════════════════
 #   EXPENSE VIEWS
-# ═══════════════════════════════════════════════════════════
 
 @login_required
 def add_expense(request):
@@ -351,10 +341,7 @@ def delete_expense(request, expense_id):
         'Expense deleted successfully!')
     return redirect('expense_list')
 
-
-# ═══════════════════════════════════════════════════════════
 #   CATEGORY VIEWS
-# ═══════════════════════════════════════════════════════════
 
 @login_required
 def category_limits(request):
@@ -456,10 +443,7 @@ def delete_limit(request, limit_id):
         'Budget limit removed!')
     return redirect('category_limits')
 
-
-# ═══════════════════════════════════════════════════════════
 #   BILL VIEWS
-# ═══════════════════════════════════════════════════════════
 
 @login_required
 def bill_list(request):
@@ -508,9 +492,8 @@ def delete_bill(request, bill_id):
     return redirect('bill_list')
 
 
-# ═══════════════════════════════════════════════════════════
 #   SEARCH VIEW
-# ═══════════════════════════════════════════════════════════
+
 
 @login_required
 def search_view(request):
@@ -653,10 +636,7 @@ def edit_profile(request):
                   'edit_profile.html', {})
 
 
-
-# ═══════════════════════════════════════════════════════════
 #   SAVINGS GOALS VIEWS
-# ═══════════════════════════════════════════════════════════
 
 @login_required
 def savings_goals(request):
@@ -708,9 +688,9 @@ def delete_goal(request, goal_id):
     messages.success(request,
         'Savings goal deleted!')
     return redirect('savings_goals')
-# ═══════════════════════════════════════════════════════════
+
 #   SUBSCRIPTION VIEWS
-# ═══════════════════════════════════════════════════════════
+
 
 @login_required
 def subscription_list(request):
